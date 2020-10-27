@@ -66,11 +66,4 @@ resource "aws_instance" "ubuntu" {
   #key_name      = aws_key_pair.ubuntu.key_name
 
   subnet_id = "${subnet_id}"
-
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = file("key")
-    host        = self.public_ip
-  }
 }
