@@ -65,5 +65,5 @@ resource "aws_instance" "ubuntu" {
 
   #key_name      = aws_key_pair.ubuntu.key_name
 
-  subnet_id = "${subnet_id}"
+  subnet_id = "${var.subnet_id}"
 }
