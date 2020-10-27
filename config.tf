@@ -27,7 +27,7 @@ variable "subnet_id" {
 
 resource "aws_security_group" "ubuntu" {
   name        = "msecurity_group"
-  vpc_id      = [var.vpc_id]
+  vpc_id      = "${var.vpc_id}"
   description = "Allow HTTP, HTTPS and SSH traffic"
 
   ingress {
@@ -59,13 +59,13 @@ resource "aws_security_group" "ubuntu" {
 }
 
 resource "aws_instance" "ubuntu" {
-  ami           = [var.image_id]
+  ami           = "${var.image_id}"
   instance_type = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.ubuntu.id]
+  vpc_security_group_ids = "${aws_security_group.ubuntu.id}"
 
   key_name      = aws_key_pair.ubuntu.key_name
 
-  subnet_id = [subnet_id]
+  subnet_id = "${subnet_id}"
 
   connection {
     type        = "ssh"
