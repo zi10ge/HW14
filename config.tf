@@ -63,7 +63,7 @@ resource "aws_instance" "ubuntu" {
   instance_type = "t2.micro"
   vpc_security_group_ids = "${aws_security_group.ubuntu.id}"
 
-  key_name      = aws_key_pair.ubuntu.key_name
+  #key_name      = aws_key_pair.ubuntu.key_name
 
   subnet_id = "${subnet_id}"
 
