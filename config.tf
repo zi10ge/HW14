@@ -61,7 +61,7 @@ resource "aws_security_group" "ubuntu" {
 resource "aws_instance" "ubuntu" {
   ami           = "${var.image_id}"
   instance_type = "t2.micro"
-  vpc_security_group_ids = "${aws_security_group.ubuntu.id}"
+  vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
 
   #key_name      = aws_key_pair.ubuntu.key_name
 
