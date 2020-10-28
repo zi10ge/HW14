@@ -13,6 +13,10 @@ provider "aws" {
   shared_credentials_file = "/root/.aws/credentials"
 }
 
+variable "key_id" {}
+variable "key_sec" {}
+
+
 variable "vpc_id" {
   default = "vpc-4d2a8527"
 }
@@ -77,6 +81,11 @@ resource "aws_security_group" "ubuntu" {
   }
 }
 
+resource "local_file" "cloud_pem" { 
+  filename = "${path.module}/cloudtls.pem"
+  content =  "${tls_private_key.example.private_key_pem}"
+}
+
 resource "aws_instance" "build_instance" {
   ami                    = "${var.image_id}"
   instance_type          = "t2.micro"
@@ -90,14 +99,29 @@ resource "aws_instance" "build_instance" {
 sudo apt update && sudo apt install -y default-jdk git maven awscli
 git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
 mvn package -f ./boxfuse-sample-java-war-hello/pom.xml
-export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
-export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
-export AWS_DEFAULT_REGION=eu-central-1
-aws s3 cp ./boxfuse-sample-java-war-hello/target/hello-1.0.war s3://mmywebapp.test.ru
+aws configure set aws_access_key_id ${var.key_id}
+aws configure set aws_secret_access_key ${var.key_sec}
+aws configure set default.region eu-central-1
+aws s3 cp ./boxfuse-sample-java-war-hello/target/hello-1.0.war s3://mywebapp.test.ru
 EOF
 }
 
-resource "local_file" "cloud_pem" { 
-  filename = "${path.module}/cloudtls.pem"
-  content =  "${tls_private_key.example.private_key_pem}"
+resource "aws_instance" "webapp_instance" {
+  ami                    = "${var.image_id}"
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
+  subnet_id              = "${var.subnet_id}"
+  key_name               = "${aws_key_pair.generated_key.key_name}"
+  count                  = 1
+  associate_public_ip_address = true 
+  user_data = <<EOF
+#!/bin/bash
+sudo apt update && sudo apt install -y tomcat8 awscli
+git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
+mvn package -f ./boxfuse-sample-java-war-hello/pom.xml
+aws configure set aws_access_key_id ${var.key_id}
+aws configure set aws_secret_access_key ${var.key_sec}
+aws configure set default.region eu-central-1
+aws s3 cp s3://mybucket.ru/hello-1.0.war /var/lib/tomcat8/webapps/hello-1.0.war
+EOF
 }
