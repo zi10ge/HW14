@@ -85,5 +85,14 @@ resource "aws_instance" "build_instance" {
   key_name               = "${aws_key_pair.generated_key.key_name}"
   count                  = 1
   associate_public_ip_address = true 
-#  user_data = <<EOF
+  user_data = <<EOF
+#!/bin/bash
+sudo apt update && sudo apt install -ydefault-jdk git maven awscli
+git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
+mvn package -f ./boxfuse-sample-java-war-hello
+export AWS_ACCESS_KEY_ID=<...placeholder...>
+export AWS_SECRET_ACCESS_KEY=<...placeholder...>
+export AWS_DEFAULT_REGION=eu-central-1
+aws s3 cp ./boxfuse-sample-java-war-hello/target/hello-1.0.war s3://mmywebapp.test.ru
+EOF
 }
