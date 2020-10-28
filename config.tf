@@ -90,8 +90,8 @@ resource "aws_instance" "build_instance" {
 sudo apt update && sudo apt install -y default-jdk git maven awscli
 git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
 mvn package -f ./boxfuse-sample-java-war-hello/pom.xml
-export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
-export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
+export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
 export AWS_DEFAULT_REGION=eu-central-1
 aws s3 cp ./boxfuse-sample-java-war-hello/target/hello-1.0.war s3://mmywebapp.test.ru
 EOF
