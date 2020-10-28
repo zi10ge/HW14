@@ -103,6 +103,7 @@ aws configure set aws_access_key_id ${var.key_id}
 aws configure set aws_secret_access_key ${var.key_sec}
 aws configure set default.region eu-central-1
 aws s3 cp ./boxfuse-sample-java-war-hello/target/hello-1.0.war s3://mywebapp.test.ru
+shutdown
 EOF
 }
 
