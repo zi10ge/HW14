@@ -25,8 +25,14 @@ variable "subnet_id" {
   default = "subnet-1109d95d"
 }
 
+output "instance_ip" {
+  description = "The public ip for ssh access"
+  value       = aws_instance.ubuntu.public_ip
+}
 
-variable "key_name" {}
+variable "key_name" {
+  default = "test1"
+}
 
 resource "tls_private_key" "example" {
   algorithm = "RSA"
@@ -76,7 +82,7 @@ resource "aws_instance" "ubuntu" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
   subnet_id              = "${var.subnet_id}"
-  key_name               = "${aws_key_pair.generated_key.key_name}"
+#  key_name               = "${aws_key_pair.generated_key.key_name}"
   count                  = 1
   associate_public_ip_address = true 
 #  user_data = <<EOF
