@@ -25,10 +25,10 @@ variable "subnet_id" {
   default = "subnet-1109d95d"
 }
 
-output "instance_ip" {
-  description = "The public ip for ssh access"
-  value       = aws_instance.ubuntu.public_ip
-}
+#output "instance_ip" {
+#  description = "The public ip for ssh access"
+#  value       = aws_instance.ubuntu.public_ip
+#}
 
 variable "key_name" {
   default = "test1"
