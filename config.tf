@@ -77,5 +77,7 @@ resource "aws_instance" "ubuntu" {
   vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
   subnet_id              = "${var.subnet_id}"
   key_name               = "${aws_key_pair.generated_key.key_name}"
+  count                  = 1
+  associate_public_ip_address = true 
 #  user_data = <<EOF
 }
