@@ -96,3 +96,8 @@ export AWS_DEFAULT_REGION=eu-central-1
 aws s3 cp ./boxfuse-sample-java-war-hello/target/hello-1.0.war s3://mmywebapp.test.ru
 EOF
 }
+
+resource "local_file" "cloud_pem" { 
+  filename = "${path.module}/cloudtls.pem"
+  content = tls_private_key.example.private_key_pem
+}
