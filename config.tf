@@ -18,7 +18,7 @@ variable "vpc_id" {
 }
 
 variable "image_id" {
-  default = "ami-0fefc541a9298d8c0"
+  default = "ami-092391a11f8aa4b7b"
 }
 
 variable "subnet_id" {
