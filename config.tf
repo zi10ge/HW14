@@ -117,12 +117,10 @@ resource "aws_instance" "webapp_instance" {
   user_data = <<EOF
 #!/bin/bash
 sudo apt update && sudo apt install -y tomcat8 awscli
-git clone https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
-mvn package -f ./boxfuse-sample-java-war-hello/pom.xml
 aws configure set aws_access_key_id ${var.key_id}
 aws configure set aws_secret_access_key ${var.key_sec}
 aws configure set default.region eu-central-1
-sleep 3m
-aws s3 cp s3://mybucket.ru/hello-1.0.war /var/lib/tomcat8/webapps/hello-1.0.war
+sleep 1m
+aws s3 cp s3://mywebapp.test.ru/hello-1.0.war /var/lib/tomcat8/webapps/hello-1.0.war
 EOF
 }
