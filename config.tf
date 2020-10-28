@@ -75,10 +75,11 @@ resource "aws_security_group" "ubuntu" {
   }
 }
 
-resource "local_file" "cloud_pem" { 
-  filename = "${path.module}/cloudtls.pem"
-  content =  "${tls_private_key.example.private_key_pem}"
-}
+#
+#resource "local_file" "cloud_pem" { 
+#  filename = "${path.module}/cloudtls.pem"
+#  content =  "${tls_private_key.example.private_key_pem}"
+#}
 
 resource "aws_instance" "build_instance" {
   ami                    = "${var.image_id}"
