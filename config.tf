@@ -25,6 +25,19 @@ variable "subnet_id" {
   default = "subnet-1109d95d"
 }
 
+
+variable "key_name" {}
+
+resource "tls_private_key" "example" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "generated_key" {
+  key_name   = "${var.key_name}"
+  public_key = "${tls_private_key.example.public_key_openssh}"
+}
+
 resource "aws_security_group" "ubuntu" {
   name        = "msecurity_group"
   vpc_id      = "${var.vpc_id}"
@@ -63,7 +76,7 @@ resource "aws_instance" "ubuntu" {
   instance_type = "t2.micro"
   vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
 
-  #key_name      = aws_key_pair.ubuntu.key_name
+  key_name      = "${aws_key_pair.generated_key.key_name}"
 
   subnet_id = "${var.subnet_id}"
 }
