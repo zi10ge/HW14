@@ -29,11 +29,6 @@ variable "subnet_id" {
   default = "subnet-1109d95d"
 }
 
-#output "instance_ip" {
-#  description = "The public ip for ssh access"
-#  value       = aws_instance.ubuntu.public_ip
-#}
-
 variable "key_name" {
   default = "test1"
 }
@@ -77,7 +72,7 @@ resource "aws_security_group" "ubuntu" {
   }
 
   tags = {
-    Name = "terraform"
+    Name = "my terraform"
   }
 }
 
@@ -103,7 +98,6 @@ aws configure set aws_access_key_id ${var.key_id}
 aws configure set aws_secret_access_key ${var.key_sec}
 aws configure set default.region eu-central-1
 aws s3 cp ./boxfuse-sample-java-war-hello/target/hello-1.0.war s3://mywebapp.test.ru
-shutdown
 EOF
 }
 
@@ -121,7 +115,7 @@ sudo apt update && sudo apt install -y tomcat8 awscli
 aws configure set aws_access_key_id ${var.key_id}
 aws configure set aws_secret_access_key ${var.key_sec}
 aws configure set default.region eu-central-1
-#sleep 1m
+while true; do if (aws s3 ls s3://mywebapp.test.ru/ | grep hello-1.0.war) > /tmp/test.txt; then break; else echo 0; fi; sleep 5; done;
 aws s3 cp s3://mywebapp.test.ru/hello-1.0.war /var/lib/tomcat8/webapps/hello-1.0.war
 EOF
 }
