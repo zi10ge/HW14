@@ -10,7 +10,7 @@ terraform {
 
 provider "aws" {
   region = "eu-central-1"
-#shared_credentials_file = "/home/tf_user/.aws/creds"
+  shared_credentials_file = "/root/.aws/credentials"
 }
 
 variable "vpc_id" {
